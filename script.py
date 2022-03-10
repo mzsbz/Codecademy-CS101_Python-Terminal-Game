@@ -37,16 +37,17 @@ class Enemy:
 
         self.game = game
 
-        # No weights for now
-        spawn_chance = random.randint(0, 2)
+        # Weighted random enemy type
+        enemy_types = [0, 1, 2]
+        random_enemy = random.choices(enemy_types, weights=[50, 35, 15], k=1)
 
         # print(Enemy.enemy_type[0]['name'])
 
-        self.name = Enemy.enemy_type[spawn_chance]['name']
-        self.health = Enemy.enemy_type[spawn_chance]['health']
-        self.damage = Enemy.enemy_type[spawn_chance]['damage']
-        self.steal = Enemy.enemy_type[spawn_chance]['steal']
-        self.hit_chance = Enemy.enemy_type[spawn_chance]['hit_chance']
+        self.name = Enemy.enemy_type[random_enemy[0]]['name']
+        self.health = Enemy.enemy_type[random_enemy[0]]['health']
+        self.damage = Enemy.enemy_type[random_enemy[0]]['damage']
+        self.steal = Enemy.enemy_type[random_enemy[0]]['steal']
+        self.hit_chance = Enemy.enemy_type[random_enemy[0]]['hit_chance']
         self.is_alive = True
 
     def update_status(self, health_change):
@@ -98,24 +99,32 @@ class Room:
             quit()
         return
 
+    def room_treasure(self):
+        player.update_status(gold_change = 25)
+        game.render("You found a treasure room! (+25 GP)")
+
+    def room_fountain(self):
+        player.update_status(health_change = 25)
+        game.render("You found a fountain! (+25 HP)")
+
     def create_room(self):
-        self.current_room_type = 0
-        player = self.current_player
+
+        # Weighted random room type
+        room_types = [0, 1, 2]
+        random_room = random.choices(room_types, weights=[75, 20, 5], k=1)
+        self.current_room_type = random_room[0]
 
         if self.current_room_type == 0:
             self.room_enemy()
             game.continue_game()
-        # TEMPORARILY DISABLED, GET TERMINAL UI WORKING FIRST
-        #     
-        # if self.current_room_type == 1:
-        #     player.update_status(gold_change = 25)
+            
+        if self.current_room_type == 1:
+            self.room_treasure()
+            game.continue_game()
 
-        #     return
-
-        # if self.current_room_type == 2:
-        #     player.update_status(health_change = 25)
-
-        #     return
+        if self.current_room_type == 2:
+            self.room_fountain()
+            game.continue_game()
 
 class Game:
 
