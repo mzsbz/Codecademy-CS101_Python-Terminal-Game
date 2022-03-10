@@ -65,43 +65,46 @@ class Room:
         self.current_room_number = room_number
         self.current_room_type = 0
 
-    def create_room(self, game):
+    def room_enemy(self):
+        player = self.current_player
+
+        # Spawn Enemy
+        enemy = Enemy(game, self.current_room_number)
+        message = f"{enemy.name} spawns!"
+
+        game.render(message)
+
+        # Loop Battle
+        while player.is_alive and enemy.is_alive:
+
+            # Player Action
+            if  game.get_input("Fight? Y/N", "Y"):
+                message = f"{player.name} attacks for 10!"
+                player.attack(enemy)
+
+                if enemy.is_alive:
+                    message += f"\n{enemy.name} ({enemy.health}HP) attacks for {enemy.damage}!"
+                    game.render(message)
+                    
+                    enemy.attack(self.current_player)
+
+            game.render(message)
+
+        # Check if game over
+        if player.is_alive:
+            game.render(f"{enemy.name} Defeated!")
+        else:
+            game.render(f"Player Defeated!")
+            quit()
+        return
+
+    def create_room(self):
         self.current_room_type = 0
         player = self.current_player
 
         if self.current_room_type == 0:
-            # Spawn Enemy
-            enemy = Enemy(game, self.current_room_number)
-            game.render(f"{enemy.name} spawns!")
-
-            while player.is_alive and enemy.is_alive:
-                if  input("Fight? (Y/N)") == "y":
-                    message = f"{player.name} attacks for 10!"
-                    player.attack(enemy)
-
-                    if enemy.is_alive == False:
-                        message += f"\n{enemy.name} defeated!"
-                
-                    if enemy.is_alive:
-                        message += f"\n{enemy.name} ({enemy.health}HP) attacks for {enemy.damage}!"
-                        game.render(message)
-                        
-                        enemy.attack(self.current_player)
-
-                        if player.is_alive == False:
-                            message += "\n"
-                            message += "=" * 40
-                            message += f"\nPlayer defeated!"
-
-                game.render(message)
-
-            if player.is_alive:
-                player_action = input("Continue Game? Y/N ")
-                if player_action == "y":
-                    return
-                else:
-                    quit()
-
+            self.room_enemy()
+            game.continue_game()
         # TEMPORARILY DISABLED, GET TERMINAL UI WORKING FIRST
         #     
         # if self.current_room_type == 1:
@@ -116,10 +119,19 @@ class Room:
 
 class Game:
 
-    def __init__(self, player, room):
+    def __init__(self, player):
         self.player = player
-        self.room = room
         self.room_number = 0
+
+    def start(self):
+        while player.is_alive:
+
+            room = Room(self.player, self.room_number)
+            room.create_room()
+
+            self.room_number += 1
+
+        print("Print Game Over Stats Here")
 
     def render(self, message = ""):
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -129,19 +141,21 @@ class Game:
         print("=" * 40)
         print(message)
 
-    def start(self):
-        while player.is_alive:
-            self.room_number += 1
-            room.create_room(self)
+    def get_input(self, message = "", check_input = ""):
+        player_input = input(message).upper()
+        return player_input == check_input
 
-        print("Print Game Over Stats Here")
+    def continue_game(self):
+        if input("Continue? Y/N").upper() == "Y":
+            return
+        else:
+            quit()
 
 
 ################################################################################################
 ################################################################################################
 
-player = Player('Mir')
-room = Room(player, 0)
-game = Game(player, room)
+player = Player("Mir")
+game = Game(player)
 
 game.start()
