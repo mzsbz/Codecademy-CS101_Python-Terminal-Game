@@ -1,6 +1,8 @@
 import random
 import os
 
+import ascii_art
+
 class Player:
 
     def __init__(self, name, health = 100, lockpick = 5):  
@@ -8,6 +10,7 @@ class Player:
         self.health = health
         self.lockpick = lockpick
         self.gold = 0
+        self.damage = 10
         self.is_alive = True
 
     def update_status(self, health_change = 0, lockpick_change = 0, gold_change = 0):
@@ -22,8 +25,11 @@ class Player:
             self.is_alive = False
 
     def attack(self, enemy):
-        damage = 10
-        enemy.update_status(-damage)
+        is_hit = [0, 1]
+        damage_mult = random.choices(is_hit, weights=[enemy.hit_chance, 100 - enemy.hit_chance], k=1)
+        enemy.update_status(-self.damage * damage_mult[0])
+
+        return damage_mult[0] == 1
 
 class Enemy:
 
@@ -57,7 +63,11 @@ class Enemy:
             self.is_alive = False
 
     def attack(self, player):
-        player.update_status(-self.damage, 0, -self.steal)
+        is_hit = [0, 1]
+        damage_mult = random.choices(is_hit, weights=[100 - self.hit_chance, self.hit_chance], k=1)
+        player.update_status(-self.damage * damage_mult[0], 0, -self.steal)
+        
+        return damage_mult[0] == 1
 
 class Room:
 
@@ -80,14 +90,23 @@ class Room:
 
             # Player Action
             if  game.get_input("Fight? Y/N", "Y"):
-                message = f"{player.name} attacks for 10!"
-                player.attack(enemy)
+                did_player_hit = player.attack(enemy)
+
+                if did_player_hit:
+                    message = f"{player.name} attacks for 10!"
+                else:
+                    message = f"{player.name} misses!"
 
                 if enemy.is_alive:
-                    message += f"\n{enemy.name} ({enemy.health}HP) attacks for {enemy.damage}!"
+                    did_enemy_hit = enemy.attack(self.current_player)
+                    
+                    if did_enemy_hit:
+                        message += f"\n{enemy.name} ({enemy.health}HP) attacks for {enemy.damage}!"
+                    else:
+                        message += f"\n{enemy.name} ({enemy.health}HP) misses!"
+
                     game.render(message)
                     
-                    enemy.attack(self.current_player)
 
             game.render(message)
 
@@ -133,6 +152,9 @@ class Game:
         self.room_number = 0
 
     def start(self):
+        self.render_start()
+        self.continue_game("Start Game? Y/N")
+
         while player.is_alive:
 
             room = Room(self.player, self.room_number)
@@ -145,21 +167,27 @@ class Game:
     def render(self, message = ""):
         os.system('cls' if os.name == 'nt' else 'clear')
 
-        print("=" * 40)
+        print("=" * 100)
         print(f"Room: {self.room_number} || {player.name} | HP: {player.health} | GP: {player.gold} | LP: {player.lockpick}")
-        print("=" * 40)
+        print("=" * 100)
         print(message)
 
     def get_input(self, message = "", check_input = ""):
         player_input = input(message).upper()
         return player_input == check_input
 
-    def continue_game(self):
-        if input("Continue? Y/N").upper() == "Y":
+    def continue_game(self, message = "Continue? Y/N"):
+        if input(message).upper() == "Y":
             return
         else:
             quit()
 
+    def render_start(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
+        print("=" * 100)
+        print(ascii_art.title)
+        print("=" * 100)
 
 ################################################################################################
 ################################################################################################
