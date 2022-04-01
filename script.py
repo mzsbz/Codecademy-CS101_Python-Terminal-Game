@@ -18,10 +18,8 @@ class Player:
         self.lockpick += lockpick_change
         self.gold += gold_change
 
-        # Health will never go above 100
-        self.health = min(self.health, 100)
-
         if self.health <= 0:
+            self.health = 0
             self.is_alive = False
 
     def attack(self, enemy):
@@ -106,7 +104,9 @@ class Room:
                         message += f"\n{enemy.name} ({enemy.health}HP) misses!"
 
                     game.render(message)
-                    
+
+            else:
+                game.render_gameover(f"You run away!")      
 
             game.render(message)
 
@@ -114,8 +114,7 @@ class Room:
         if player.is_alive:
             game.render(f"{enemy.name} Defeated!")
         else:
-            game.render(f"Player Defeated!")
-            quit()
+            game.render_gameover(f"Player Defeated!")   
         return
 
     def room_treasure(self):
@@ -170,7 +169,8 @@ class Game:
         print("=" * 100)
         print(f"Room: {self.room_number} || {player.name} | HP: {player.health} | GP: {player.gold} | LP: {player.lockpick}")
         print("=" * 100)
-        print(message)
+        if message:
+            print(message)
 
     def get_input(self, message = "", check_input = ""):
         player_input = input(message).upper()
@@ -180,7 +180,7 @@ class Game:
         if input(message).upper() == "Y":
             return
         else:
-            quit()
+            self.render_gameover(f"You surrendered!")
 
     def render_start(self):
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -188,6 +188,17 @@ class Game:
         print("=" * 100)
         print(ascii_art.title)
         print("=" * 100)
+
+    def render_gameover(self, reason):
+        self.render()
+
+        print("=" * 100)
+        print(ascii_art.gameover)
+        print("=" * 100)
+
+        print("\n", reason)
+
+        quit()
 
 ################################################################################################
 ################################################################################################
