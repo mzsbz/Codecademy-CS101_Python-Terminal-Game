@@ -9,6 +9,7 @@ Brave through endless rooms until you die.
 + Ascii art! (sort of)
 
 ### Future
++ Difficulty increases over time
 + Add doors before each room
 + Bash or lockpick the door
 + Lockpicking minigame
