@@ -1,3 +1,10 @@
+class Player:
+
+    def __init__(self, name, token):
+        self.name = name
+        self.token = token
+        self.moves = []
+
 class TicTacToe:
     win_conditions = [
         ['A1', 'B1', 'C1'],
@@ -11,9 +18,20 @@ class TicTacToe:
     ]
 
     def __init__(self, player_1, player_2):
-        self.player_1 = player_1
-        self.player_2 = player_2
-        self.players = [player_1, player_2]
+        self.player_1 = Player(player_1, "O")
+        self.player_2 = Player(player_2, "X")
+        self.players = [self.player_1, self.player_2]
+        self.all_moves = []
+
+    def move(self, player, input):
+        all_moves = self.all_moves
+        player_moves = self.players[player].moves
+        
+        if input not in all_moves:
+            all_moves.append(input)
+            player_moves.append(input)
+        else:
+            print("Invalid move!")
 
     def render_table(self):
         table = {
@@ -38,20 +56,9 @@ class TicTacToe:
 
 
 
-class Player:
+game = TicTacToe("Alex", "Lisa")
 
-    def __init__(self, name, token):
-        self.name = name
-        self.token = token
-        self.moves = []
-
-    def move(self, move):
-        self.moves.append(move)
-
-player_1 = Player("Alex", "X")
-player_2 = Player("Lisa", "O")
-game = TicTacToe(player_1, player_2)
-
-player_1.move("A1")
-player_2.move("B2")
+game.move(0, "A1")
+game.move(1, "B3")
+game.move(0, "B3")
 game.render_table()
