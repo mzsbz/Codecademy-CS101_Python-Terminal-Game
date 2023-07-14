@@ -33,6 +33,26 @@ class TicTacToe:
         else:
             print("Invalid move!")
 
+        self.check_win(player)
+
+    def check_win(self, player):
+        
+        '''
+        Converts player_moves list into a set.
+        Converts win_conditions list into a set
+        If win_condition is subset of player_moves
+        Player wins
+        '''
+
+        player_moves_set = set(self.players[player].moves)
+        win_conditions = TicTacToe.win_conditions
+
+        for win_condition in win_conditions:
+            win_condition_set = set(win_condition)
+
+            if win_condition_set <= player_moves_set:
+                print(f"{self.players[player].name} has won!")
+
     def render_table(self):
         table = {
             0: "  | 1 | 2 | 3 |",
@@ -60,5 +80,8 @@ game = TicTacToe("Alex", "Lisa")
 
 game.move(0, "A1")
 game.move(1, "B3")
-game.move(0, "B3")
+game.move(1, "B2")
+game.move(0, "C1")
+game.move(1, "C2")
+game.move(0, "B1")
 game.render_table()
