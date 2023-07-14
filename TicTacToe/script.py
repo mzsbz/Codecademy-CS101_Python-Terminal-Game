@@ -7,14 +7,14 @@ class Player:
 
 class TicTacToe:
     win_conditions = [
-        ['A1', 'B1', 'C1'],
-        ['A2', 'B2', 'C2'],
-        ['A3', 'B3', 'C3'],
-        ['A1', 'A2', 'A3'],
-        ['B1', 'B2', 'B3'],
-        ['C1', 'C2', 'C3'],
-        ['A1', 'B2', 'C3'],
-        ['A3', 'B2', 'C1']
+        {'A1', 'B1', 'C1'},
+        {'A2', 'B2', 'C2'},
+        {'A3', 'B3', 'C3'},
+        {'A1', 'A2', 'A3'},
+        {'B1', 'B2', 'B3'},
+        {'C1', 'C2', 'C3'},
+        {'A1', 'B2', 'C3'},
+        {'A3', 'B2', 'C1'}
     ]
 
     def __init__(self, player_1, player_2):
@@ -48,9 +48,7 @@ class TicTacToe:
         win_conditions = TicTacToe.win_conditions
 
         for win_condition in win_conditions:
-            win_condition_set = set(win_condition)
-
-            if win_condition_set <= player_moves_set:
+            if win_condition <= player_moves_set:
                 print(f"{self.players[player].name} has won!")
 
     def render_table(self):
