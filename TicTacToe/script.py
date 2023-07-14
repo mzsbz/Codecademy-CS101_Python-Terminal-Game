@@ -59,6 +59,7 @@ class TicTacToe:
             if win_condition <= player_moves_set:
                 print(f"{self.players[player].name} has won!")
                 self.game_over = True
+                break
 
 
     def move(self, input):

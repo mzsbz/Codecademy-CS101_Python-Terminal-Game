@@ -2,10 +2,10 @@
 
 ### Todo:
 - refactor rendering
-- fix double win message
 
 ### Done:
 
+- fix double win message in "v" win conditions
 - refactor alternate users
 - refactor move validation
 - check valid move
