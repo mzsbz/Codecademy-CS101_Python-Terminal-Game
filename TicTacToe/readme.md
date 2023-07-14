@@ -1,7 +1,7 @@
 # Tic Tac Toe
 
 ### Todo:
-- alternate users
+- refactor move validation
 
 ### Done:
 
@@ -9,3 +9,4 @@
 - check win condition
 - get inputs
 - start game loop
+- alternate users

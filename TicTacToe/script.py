@@ -17,24 +17,22 @@ class TicTacToe:
         {'A3', 'B2', 'C1'}
     ]
 
+
     def __init__(self, player_1, player_2):
         self.player_1 = Player(player_1, "O")
         self.player_2 = Player(player_2, "X")
         self.players = [self.player_1, self.player_2]
         self.all_moves = []
         self.game_over = False
+        self.turn = 0
+        self.advance_turn = True
 
-    def move(self, player, input):
-        all_moves = self.all_moves
-        player_moves = self.players[player].moves
-        
-        if input not in all_moves:
-            all_moves.append(input)
-            player_moves.append(input)
-        else:
-            print("Invalid move!")
 
-        self.check_win(player)
+    def check_turn(self, advance_turn):
+        if advance_turn:
+            self.turn ^= 1
+            return self.turn
+
 
     def check_win(self, player):
         
@@ -52,6 +50,24 @@ class TicTacToe:
             if win_condition <= player_moves_set:
                 print(f"{self.players[player].name} has won!")
                 self.game_over = True
+
+
+    def move(self, input):
+        player = self.check_turn(self.advance_turn)
+
+        all_moves = self.all_moves
+        player_moves = self.players[player].moves
+        
+        if input not in all_moves:
+            all_moves.append(input)
+            player_moves.append(input)
+            self.advance_turn = True
+        else:
+            print("Invalid move!")
+            self.advance_turn = False
+
+        self.check_win(player)
+
 
     def render_table(self):
         table = {
@@ -75,10 +91,9 @@ class TicTacToe:
             print(''.join(table[row]))
 
     def start(self):
-
         while not self.game_over:
             user_input = input().upper()
-            self.move(0, user_input)
+            self.move(user_input)
             self.render_table()
 
 
