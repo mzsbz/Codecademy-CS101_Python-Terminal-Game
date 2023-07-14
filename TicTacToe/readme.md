@@ -2,6 +2,7 @@
 
 ### Todo:
 - refactor rendering
+- fix double win message
 
 ### Done:
 
