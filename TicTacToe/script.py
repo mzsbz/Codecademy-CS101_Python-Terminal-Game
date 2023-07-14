@@ -17,6 +17,12 @@ class TicTacToe:
         {'A3', 'B2', 'C1'}
     ]
 
+    valid_moves = [
+        'A1', 'A2', 'A3',
+        'B1', 'B2', 'B3',
+        'C1', 'C2', 'C3'
+    ]
+
 
     def __init__(self, player_1, player_2):
         self.player_1 = Player(player_1, "O")
@@ -25,14 +31,21 @@ class TicTacToe:
         self.all_moves = []
         self.game_over = False
         self.turn = 0
-        self.advance_turn = True
+        self.can_advance = True
 
 
-    def check_turn(self, advance_turn):
-        if advance_turn:
+    def advance_turn(self):
+        if self.can_advance:
             self.turn ^= 1
-            return self.turn
 
+
+    def check_valid(self, input):
+        if input not in TicTacToe.valid_moves or input in self.all_moves:
+            print("Invalid move!")
+            self.can_advance = False
+            return False
+        self.can_advance = True
+        return True
 
     def check_win(self, player):
         
@@ -53,20 +66,16 @@ class TicTacToe:
 
 
     def move(self, input):
-        player = self.check_turn(self.advance_turn)
 
         all_moves = self.all_moves
-        player_moves = self.players[player].moves
+        player_moves = self.players[self.turn].moves
         
-        if input not in all_moves:
+        if self.check_valid(input):
             all_moves.append(input)
             player_moves.append(input)
-            self.advance_turn = True
-        else:
-            print("Invalid move!")
-            self.advance_turn = False
 
-        self.check_win(player)
+        self.check_win(self.turn)
+        self.advance_turn()
 
 
     def render_table(self):

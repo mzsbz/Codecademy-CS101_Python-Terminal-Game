@@ -1,10 +1,12 @@
 # Tic Tac Toe
 
 ### Todo:
-- refactor move validation
+- refactor rendering
 
 ### Done:
 
+- refactor alternate users
+- refactor move validation
 - check valid move
 - check win condition
 - get inputs
