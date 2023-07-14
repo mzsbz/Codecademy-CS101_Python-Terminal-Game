@@ -1,9 +1,11 @@
 # Tic Tac Toe
 
 ### Todo:
-- get inputs
+- alternate users
 
 ### Done:
 
 - check valid move
 - check win condition
+- get inputs
+- start game loop

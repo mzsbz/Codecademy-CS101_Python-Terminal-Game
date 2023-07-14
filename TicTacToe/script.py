@@ -22,6 +22,7 @@ class TicTacToe:
         self.player_2 = Player(player_2, "X")
         self.players = [self.player_1, self.player_2]
         self.all_moves = []
+        self.game_over = False
 
     def move(self, player, input):
         all_moves = self.all_moves
@@ -50,6 +51,7 @@ class TicTacToe:
         for win_condition in win_conditions:
             if win_condition <= player_moves_set:
                 print(f"{self.players[player].name} has won!")
+                self.game_over = True
 
     def render_table(self):
         table = {
@@ -72,14 +74,14 @@ class TicTacToe:
         for row in table:
             print(''.join(table[row]))
 
+    def start(self):
+
+        while not self.game_over:
+            user_input = input().upper()
+            self.move(0, user_input)
+            self.render_table()
+
 
 
 game = TicTacToe("Alex", "Lisa")
-
-game.move(0, "A1")
-game.move(1, "B3")
-game.move(1, "B2")
-game.move(0, "C1")
-game.move(1, "C2")
-game.move(0, "B1")
-game.render_table()
+game.start()
