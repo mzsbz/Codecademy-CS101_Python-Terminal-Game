@@ -56,6 +56,10 @@ class TicTacToe:
         player_moves_set = set(self.players[player].moves)
         win_conditions = TicTacToe.win_conditions
 
+        if len(self.all_moves) >= 9:
+            self.message_winner = "Game is a draw!"
+            self.game_over = True
+
         for win_condition in win_conditions:
             if win_condition <= player_moves_set:
                 self.message_winner = f"{self.players[player].name} has won!"

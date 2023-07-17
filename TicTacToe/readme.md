@@ -1,10 +1,10 @@
 # Tic Tac Toe
 
 ### Todo:
-- game draw condition
 
 ### Done:
 
+- game draw condition
 - player name input
 - refactor rendering
 - fix double win message in "v" win conditions
