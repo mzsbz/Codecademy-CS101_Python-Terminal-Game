@@ -2,6 +2,8 @@
 
 ### Todo:
 
+- NPC?
+
 ### Done:
 
 - game draw condition
