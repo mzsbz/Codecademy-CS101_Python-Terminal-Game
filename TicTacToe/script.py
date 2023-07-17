@@ -1,3 +1,5 @@
+import os
+
 class Player:
 
     def __init__(self, name, token):
@@ -24,10 +26,7 @@ class TicTacToe:
     ]
 
 
-    def __init__(self, player_1, player_2):
-        self.player_1 = Player(player_1, "O")
-        self.player_2 = Player(player_2, "X")
-        self.players = [self.player_1, self.player_2]
+    def __init__(self):
         self.all_moves = []
         self.game_over = False
         self.turn = 0
@@ -35,11 +34,13 @@ class TicTacToe:
 
     def advance_turn(self):
         self.turn ^= 1
+        self.message_turn = f"{self.players[self.turn].name}'s turn."
 
 
     def check_valid(self, input):
+        self.message_valid = ""
         if input not in TicTacToe.valid_moves or input in self.all_moves:
-            print("Invalid move!")
+            self.message_valid = "Invalid Move!"
             return False
         return True
 
@@ -57,7 +58,7 @@ class TicTacToe:
 
         for win_condition in win_conditions:
             if win_condition <= player_moves_set:
-                print(f"{self.players[player].name} has won!")
+                self.message_winner = f"{self.players[player].name} has won!"
                 self.game_over = True
                 break
 
@@ -92,16 +93,43 @@ class TicTacToe:
 
                 table[move_row][move_col] = f" {player.token} |"
 
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("Tic Tac Toe!")
+        print("\n")
+
         for row in table:
             print(''.join(table[row]))
 
+        print("\n")
+
+    
+    def render_messages(self):
+        if self.message_valid:
+            print(self.message_valid)
+        if not self.game_over:
+            print(self.message_turn)
+        else:
+            print(self.message_winner)
+
+
     def start(self):
+        message = "Welcome to Tic Tac Toe! \n"
+        print(message)
+
+        self.player_1 = Player(input("Enter Player 1 Name: "), "O")
+        self.player_2 = Player(input("Enter Player 2 Name: "), "X")
+        self.players = [self.player_1, self.player_2]
+
+        self.render_table()
+        print(f"{self.players[self.turn].name}'s turn.")
+
         while not self.game_over:
-            user_input = input().upper()
+            user_input = input("Select Cell: ").upper()
             self.move(user_input)
             self.render_table()
+            self.render_messages()
 
 
 
-game = TicTacToe("Alex", "Lisa")
+game = TicTacToe()
 game.start()
